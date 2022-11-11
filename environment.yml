@@ -3,7 +3,6 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.8
-  - osmnx=1.2.2
-  - streamlit=1.14.0
-  - streamlit-folium=0.6.15
+  - osmnx
+  - streamlit
+  - streamlit-folium
