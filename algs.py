@@ -140,14 +140,11 @@ def floyd_warshall(G, source, target, weight='weight'):
        between nodes.
     """
     # could make this its own function to reduce memory costs
-    # start = list(G.nodes).index(source)
-    # end = list(G.nodes).index(target)
     pred = floyd_warshall_predecessor_and_distance(G, weight=weight)[0]
-    paths = [source]
-    while (paths[-1] != target):
-        if pred[paths[-1]][target] == paths[-1]:
-            paths.append(target)
-        else:
-            paths.append(pred[paths[-1]][target])
 
-    return paths
+    # Get the path from the predecessor dictionary for the source and target
+    path = [target]
+    while path[-1] != source:
+        path.append(pred[source][path[-1]])
+    path.reverse() 
+    return path
