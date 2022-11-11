@@ -1,0 +1,8 @@
+name: osmnx
+channels:
+  - conda-forge
+dependencies:
+  - python=3.8
+  - osmnx=1.2.
+  - streamlit=1.14.0
+  - streamlit-folium=0.6.15
