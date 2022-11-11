@@ -8,7 +8,9 @@ from utils import get_pos, distance, find_shortest_path, find_k_shortest_path
 
 if __name__ == '__main__':
     st.title("Find shortest path")
-    alg = st.selectbox('Algorithm', ['dijkstra', 'floyd_warshall', 'astar', 'k_shortest_path'])
+    alg = st.selectbox('Algorithm', ['dijkstra', 'floyd_warshall', 'astar', 'k_shortest_paths'])
+    if alg == "k_shortest_paths":
+        k = st.slider('Number of paths', min_value=1, max_value=10, value=3)
 
     map = st_folium(folium_map, width=1000, height=500)
 
@@ -33,7 +35,7 @@ if __name__ == '__main__':
 
         if len(list_points) == 2 and not flag[0]:
             # with st.spinner(text='Finding Shortest Path...'):
-            new_map[0], n_nodes[0], n_edges[0], distance_route[0] = find_shortest_path(alg, folium_map, list_points)
+            new_map[0], n_nodes[0], n_edges[0], distance_route[0] = find_shortest_path(alg, folium_map, list_points, k=k)
             flag[0] = True
             st.success('Success!')
 
@@ -50,7 +52,7 @@ if __name__ == '__main__':
         st.info("Number of nodes: {}".format(n_nodes[0]))
         st.info("Number of edges: {}".format(n_edges[0]))
         if edge_attr == "length":
-            st.info("Length of route: {} km".format(distance_route[0]))
+            st.info("Length of route(s): {} km".format(distance_route[0]))
         else:
-            st.info("Travel time of route: {} minutes".format(distance_route[0]))
+            st.info("Travel time of route(s): {} minutes".format(distance_route[0]))
     
