@@ -1,3 +1,4 @@
+import time
 import random
 import osmnx as ox
 import folium as fl
@@ -66,6 +67,7 @@ def find_shortest_path(alg, fl_map, list_points, k=None):
     orig = ox.distance.nearest_nodes(G, X=list_points[0][1], Y=list_points[0][0])
     dest = ox.distance.nearest_nodes(G, X=list_points[1][1], Y=list_points[1][0])
 
+    start_time = time.time()
     if alg == "dijkstra":
         route = dijkstra_path(G, orig, dest, edge_attr)
     elif alg == "floyd_warshall":
@@ -79,8 +81,10 @@ def find_shortest_path(alg, fl_map, list_points, k=None):
         route = astar_path(G, orig, dest, heuristic=heuristic_dist, weight=edge_attr)
     else:
         route = []
+    end_time = time.time()
 
     print("Route", route)
+    print("Time", end_time - start_time)
 
     m1 = ox.plot_graph_folium(G, graph_map=fl_map, popup_attribute=edge_attr, weight=2, color="#8b0000")
     if len(route) > 0:
@@ -102,13 +106,19 @@ def find_k_shortest_path(fl_map, list_points, k):
     orig = ox.distance.nearest_nodes(G, X=list_points[0][1], Y=list_points[0][0])
     dest = ox.distance.nearest_nodes(G, X=list_points[1][1], Y=list_points[1][0])
 
+    start_time = time.time()
     routes = k_shortest_paths(G, orig, dest, k, edge_attr)
+    end_time = time.time()
+
     route_lengths = []
+    
     print("Route", routes)
+    print("Time", end_time - start_time)
 
     m1 = ox.plot_graph_folium(G, graph_map=fl_map, popup_attribute=edge_attr, weight=2, color="#8b0000")
     list_colors = random.choices(colors, k=k)
     new_map = m1
+    
     for i, route in enumerate(routes):
         new_map = ox.plot_route_folium(G, route, route_map=new_map, popup_attribute=edge_attr, 
                                         color=list_colors[i], edge_width=6, weight=7)

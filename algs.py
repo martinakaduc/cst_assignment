@@ -198,7 +198,7 @@ def k_shortest_paths(G, source, target, k=1, weight='weight'):
         try:
             path = next(shortest_path_solver)
             paths.append(path)
-        except nx.NetworkXNoPath:
+        except:
             break
     return paths
 
