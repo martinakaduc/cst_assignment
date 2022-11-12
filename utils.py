@@ -72,6 +72,7 @@ def find_shortest_path(alg, fl_map, list_points, k=None):
         route = []
     end_time = time.time()
 
+    print("=== {} ===".format(alg))
     print("Route", route)
     print("Time", end_time - start_time)
 
@@ -101,6 +102,7 @@ def find_k_shortest_path(fl_map, list_points, k):
 
     route_lengths = []
     
+    print("=== {} ===".format("k_shortest_paths"))
     print("Route", routes)
     print("Time", end_time - start_time)
 
