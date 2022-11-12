@@ -65,7 +65,11 @@ if __name__ == '__main__':
         st.info("Number of nodes: {}".format(st.session_state.n_nodes))
         st.info("Number of edges: {}".format(st.session_state.n_edges))
         if edge_attr == "length":
-            st.info("Length of route(s): {} km".format(st.session_state.distance_route/1000))
+            if isinstance(st.session_state.distance_route, list):
+                list_distance = [d/1000 for d in st.session_state.distance_route]
+                st.info("Length of route(s): {} km".format(list_distance))
+            else:
+                st.info("Length of route(s): {} km".format(st.session_state.distance_route/1000))
         else:
             st.info("Travel time of route(s): {} minutes".format(st.session_state.distance_route))
     

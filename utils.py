@@ -50,8 +50,9 @@ def find_shortest_path(alg, fl_map, list_points, k=None):
     G = ox.graph_from_point(mean_point, dist=radius//2, 
                             truncate_by_edge=True, network_type='drive')
 
-    # G = ox.speed.add_edge_speeds(G, fallback=60)
-    # G = ox.speed.add_edge_travel_times(G)
+    if edge_attr == "travel_time":
+        G = ox.speed.add_edge_speeds(G, fallback=60)
+        G = ox.speed.add_edge_travel_times(G)
 
     orig = ox.distance.nearest_nodes(G, X=list_points[0][1], Y=list_points[0][0])
     dest = ox.distance.nearest_nodes(G, X=list_points[1][1], Y=list_points[1][0])
@@ -92,6 +93,10 @@ def find_k_shortest_path(fl_map, list_points, k):
     radius = distance_real(list_points[0], list_points[1]) * 1.5
     G = ox.graph_from_point(mean_point, dist=radius//2, 
                             truncate_by_edge=True, network_type='drive')
+
+    if edge_attr == "travel_time":
+        G = ox.speed.add_edge_speeds(G, fallback=60)
+        G = ox.speed.add_edge_travel_times(G)
 
     orig = ox.distance.nearest_nodes(G, X=list_points[0][1], Y=list_points[0][0])
     dest = ox.distance.nearest_nodes(G, X=list_points[1][1], Y=list_points[1][0])
