@@ -4,17 +4,6 @@ import osmnx as ox
 import folium as fl
 from algs import dijkstra_path, floyd_warshall_path, astar_path, k_shortest_paths
 
-folium_map = fl.Map(location=[10.762622, 106.660172], zoom_start=13)
-folium_map.add_child(fl.ClickForMarker(popup=None))
-# map.add_child(fl.LatLngPopup())
-
-list_points = []
-flag = [False]
-new_map = [None]
-n_nodes = [None]
-n_edges = [None]
-distance_route = [None]
-
 edge_attr = "length"
 # edge_attr = "travel_time"
 

@@ -1,7 +1,6 @@
 from heapq import heappush, heappop
 from itertools import count
 import networkx as nx
-from networkx.utils import generate_unique_node
 from networkx.algorithms.shortest_paths.weighted import _weight_function
 
 def dijkstra_path(G, source, target, weight='weight'):

@@ -1,8 +1,8 @@
+import folium as fl
 import streamlit as st
 from streamlit_folium import st_folium
-from utils import folium_map
-from utils import list_points, new_map, n_nodes, n_edges, distance_route, flag, edge_attr
-from utils import get_pos, distance, find_shortest_path, find_k_shortest_path
+from utils import edge_attr
+from utils import get_pos, distance, find_shortest_path
 
 if __name__ == '__main__':
     st.title("Find shortest path")
@@ -12,47 +12,60 @@ if __name__ == '__main__':
     else:
         k = None
 
-    map = st_folium(folium_map, width=1000, height=500)
+    if 'folium_map' not in st.session_state or st.button('Reset map'):
+        st.session_state.folium_map = fl.Map(location=[10.762622, 106.660172], zoom_start=13)
+        st.session_state.folium_map.add_child(fl.ClickForMarker(popup=None))
+
+        st.session_state.list_points = []
+        st.session_state.flag = False
+        st.session_state.new_map = None
+        st.session_state.n_nodes = None
+        st.session_state.n_edges = None
+        st.session_state.distance_route = None
+
+    map = st_folium(st.session_state.folium_map, width=1000, height=500)
 
     # print(map)
     if map["last_clicked"]:
         data = get_pos(map['last_clicked'])
         if data is not None:
-            if len(list_points) > 0:
-                if distance(list_points[-1], data) > 0.0001:
-                    list_points.append(data)
+            if len(st.session_state.list_points) > 0:
+                if distance(st.session_state.list_points[-1], data) > 0.0001:
+                    st.session_state.list_points.append(data)
             else:
-                list_points.append(data)
+                st.session_state.list_points.append(data)
         
-        if len(list_points) > 2:
-            list_points.pop(0)
-            list_points.pop(0)
-            new_map = [None]
-            n_nodes = [None]
-            n_edges = [None]
-            distance_route = [None]
-            flag[0] = False
+        if len(st.session_state.list_points) > 2:
+            st.session_state.list_points.pop(0)
+            st.session_state.list_points.pop(0)
+            st.session_state.flag = False
+            st.session_state.new_map = None
+            st.session_state.n_nodes = None
+            st.session_state.n_edges = None
+            st.session_state.distance_route = None
 
-        if len(list_points) == 2 and not flag[0]:
+        if len(st.session_state.list_points) == 2 and not st.session_state.flag:
             # with st.spinner(text='Finding Shortest Path...'):
-            new_map[0], n_nodes[0], n_edges[0], distance_route[0] = find_shortest_path(alg, folium_map, list_points, k=k)
-            flag[0] = True
+            st.session_state.new_map, st.session_state.n_nodes, st.session_state.n_edges, \
+                st.session_state.distance_route = find_shortest_path(alg, st.session_state.folium_map, \
+                    st.session_state.list_points, k=k)
+            st.session_state.flag = True
             st.success('Success!')
 
-            if new_map[0] is not None:
-                map = st_folium(new_map[0], width=1000, height=500)
+            if st.session_state.new_map is not None:
+                map = st_folium(st.session_state.new_map, width=1000, height=500)
 
-    if new_map[0] is not None:
+    if st.session_state.new_map is not None:
         st.header("Shortest Path")
 
-    for i, point in enumerate(list_points):
+    for i, point in enumerate(st.session_state.list_points):
         st.info("Point {}: {}".format(i+1, point))
 
-    if n_nodes[0] is not None and n_edges[0] is not None:
-        st.info("Number of nodes: {}".format(n_nodes[0]))
-        st.info("Number of edges: {}".format(n_edges[0]))
+    if st.session_state.n_nodes is not None and st.session_state.n_edges is not None:
+        st.info("Number of nodes: {}".format(st.session_state.n_nodes))
+        st.info("Number of edges: {}".format(st.session_state.n_edges))
         if edge_attr == "length":
-            st.info("Length of route(s): {} km".format(distance_route[0]))
+            st.info("Length of route(s): {} km".format(st.session_state.distance_route/1000))
         else:
-            st.info("Travel time of route(s): {} minutes".format(distance_route[0]))
+            st.info("Travel time of route(s): {} minutes".format(st.session_state.distance_route))
     
