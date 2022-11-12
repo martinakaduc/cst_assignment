@@ -1,4 +1,3 @@
-from collections import deque
 from heapq import heappush, heappop
 from itertools import count
 import networkx as nx

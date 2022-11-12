@@ -1,5 +1,3 @@
-import copy
-import folium as fl
 import streamlit as st
 from streamlit_folium import st_folium
 from utils import folium_map
@@ -11,6 +9,8 @@ if __name__ == '__main__':
     alg = st.selectbox('Algorithm', ['dijkstra', 'floyd_warshall', 'astar', 'k_shortest_paths'])
     if alg == "k_shortest_paths":
         k = st.slider('Number of paths', min_value=1, max_value=10, value=3)
+    else:
+        k = None
 
     map = st_folium(folium_map, width=1000, height=500)
 
